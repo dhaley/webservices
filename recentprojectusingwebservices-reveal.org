@@ -1,0 +1,79 @@
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+TITLE: Infrastructure as code using Amazon Web Services
+#+OPTIONS: toc:nil timestamp:nil
+
+# #+begin_quote
+# Or How the Communications Web App team learned to love AWS Web Services with php frameworks
+# #+end_quote
+
+* Why Docker in the Cloud?
+** up-to-date (modernize)
+** advantages of cloud (scale & cost)
+** risk (remove errors and security violations)
+* Adopted cloud-native architecture & frameworks (six of the [[https://12factor.net][twelve-factors]])
+** 1) Reduced software erosion
+*** separation between the app and the infrastructure on which it runs
+**** can bundle libraries, system packages
+** 2) Solved dependency management
+*** bundler, [[https://getcomposer.org][composer]] (private packagist)
+*** don't track build artifacts in version control
+** 3) Achieved dev-prod parity 
+*** Virtualbox with Vagrant
+**** Configuration Management
+***** Puppet
+***** Chef
+***** Ansible
+*** [[https://www.docker.com][Docker]]1 (immutable) images + Docker configuration (environment variables + init)
+** 4) Separated config from code
+*** app’s config is everything that is likely to vary between deploys (staging, production, developer environments, etc).
+**** database credenials from Docker env vars
+** 5) Became stateless
+*** avoid “sticky sessions”
+*** datastore that offers time-expiration, such as Memcached or Redis
+** 6) Centralized logging
+*** Logs provide visibility into the behavior of a running app
+* Continuous delivery with AWS Services
+** Cluster Orchestration
+*** Kubernetes, [[https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-ecs.html][ECS]], Swarm
+** Containers
+*** [[https://www.nginx.com][nginx]], apache
+*** [[https://www.php.net][php]], python, ruby
+[[file:./php-sdk-overview.png][file:./php-sdk-overview.png]]
+*** Relational Database Service
+**** Amazon Aurora
+*** Storage
+**** binary asset services
+***** [[https://aws.amazon.com/s3/][S3]]
+**** traditional NFS filesystem
+***** EFS (Elastic File System)
+*** Logging
+**** [[https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-cloudwatchlogs.html][CloudWatch]]
+*** Caching
+**** [[https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-elasticache.html][elasticache]] (Redis, Memcached)
+**** Require forked version of php memcached libraries to support memcached cluster
+*** [[https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-ses.html][📨 ses]] (smtp api)
+*** ssm (parameter store)
+*** Simple Queue Service (Amazon [[https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-sqs.html][SQS]])
+*** ecr
+*** elasticsearch
+**** ELk stack
+***** kibana
+*** [[https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html][IAM]]
+*** [[https://aws.amazon.com/blogs/devops/introducing-application-load-balancer-unlocking-and-optimizing-architectures/][Elastic Load Balancing]]
+**** blue/green
+**** nginx entrypoints
+*** AWS Lambda
+* Using Web Services in Production
+*** Four production Drupal sites
+**** Most scalable CMS 💧
+**** RESTful web services are smooth in Drupal 8 
+**** Modules supporting AWS Web Services
+***** https://www.drupal.org/project/s3fs
+***** https://www.drupal.org/project/ses_mailer
+**** Decoupled Drupal
+**** RESTful web services are smooth in Drupal 8 
+**** NREL services
+***** NREL People Services
+*** Wordpress
+**** Wordpress is 34 percent of web
+**** using [[https://roots.io/twelve-factor-wordpress/][Bedrock]] to make WordPress cloud native
