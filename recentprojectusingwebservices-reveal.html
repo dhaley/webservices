@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Infrastructure as code using Amazon Web Services</title>
-<meta name="author" content="Damon Haley"/>
+<title>Using Amazon Web Services as infrastructure</title>
+<meta name="author" content="(Damon Haley)"/>
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/css/reveal.css"/>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/css/theme/black.css" id="theme"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/css/theme/moon.css" id="theme"/>
+
 
 <!-- If the query includes 'print-pdf', include the PDF print sheet -->
 <script>
@@ -25,296 +26,440 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide">
-<h1 class="title">Infrastructure as code using Amazon Web Services</h1><h2 class="author">Damon Haley</h2>
+<section id="sec-title-slide"><h1 class="title">Using Amazon Web Services as infrastructure</h1><h2 class="author">Damon Haley</h2>
 </section>
+<aside class="notes">
+<p>
+Your note
+</p>
+
+</aside>
 
 <section>
-<section id="slide-orgdb500ab">
-<h2 id="orgdb500ab">Why Docker in the Cloud?</h2>
-<div class="outline-text-2" id="text-orgdb500ab">
+<section id="slide-org9cac296">
+<h2 id="org9cac296">About Me</h2>
+<div class="outline-text-2" id="text-org9cac296">
 </div>
 </section>
-<section id="slide-org1a80ae4">
-<h3 id="org1a80ae4">up-to-date (modernize)</h3>
+<section id="slide-org2963356">
+<h3 id="org2963356">Senior web developer and devops specialist</h3>
 </section>
-<section id="slide-org860f901">
-<h3 id="org860f901">advantages of cloud (scale &amp; cost)</h3>
-</section>
-<section id="slide-orge8dc68f">
-<h3 id="orge8dc68f">risk (remove errors and security violations)</h3>
+<section id="slide-org1bb33a3">
+<h3 id="org1bb33a3">Set up continuous integration on three production environments at NREL</h3>
+
 </section>
 </section>
 <section>
-<section id="slide-org8dbccd6">
-<h2 id="org8dbccd6">Adopted cloud-native architecture &amp; frameworks (six of the <a href="https://12factor.net">twelve-factors</a>)</h2>
-<div class="outline-text-2" id="text-org8dbccd6">
+<section id="slide-org48eab30">
+<h2 id="org48eab30">Why the AWS ☁️?</h2>
+<div class="outline-text-2" id="text-org48eab30">
 </div>
 </section>
-<section id="slide-orgb366d09">
-<h3 id="orgb366d09">1) Reduced software erosion</h3>
-<div class="outline-text-3" id="text-orgb366d09">
+<section id="slide-org800faff">
+<h3 id="org800faff">stay up-to-date (modernize &amp; stay secure)</h3>
+</section>
+<section id="slide-org5d72c5d">
+<h3 id="org5d72c5d">gain control (scale &amp; cost)</h3>
+</section>
+<section id="slide-org21df92a">
+<h3 id="org21df92a">catch errors outside of prod (continuous integration)</h3>
+</section>
+</section>
+<section>
+<section id="slide-org4b61030">
+<h2 id="org4b61030">Cloud-native architecture &amp; frameworks (<a href="https://12factor.net">https://12factor.net</a>)</h2>
+<div class="outline-text-2" id="text-org4b61030">
 </div>
 </section>
-<section id="slide-org80fbc7c">
-<h4 id="org80fbc7c">separation between the app and the infrastructure on which it runs</h4>
-<div class="outline-text-4" id="text-org80fbc7c">
+<section id="slide-org7e6f305">
+<h3 id="org7e6f305">1) Reduce software erosion between app and infrastructure</h3>
+<div class="outline-text-3" id="text-org7e6f305">
+</div>
+</section>
+<section id="slide-org940832d">
+<h4 id="org940832d">separation between the app and the infrastructure on which it runs</h4>
+<div class="outline-text-4" id="text-org940832d">
 </div>
 <ul class="org-ul">
-<li><a id="org9c3ebd8"></a>can bundle libraries, system packages<br /></li>
+<li><a id="orgf179563"></a>can bundle libraries, system packages<br />
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>apk add -U --no-cache -t .wodby-php-edge-run-deps \
+    -X http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+    gnu-libiconv=1.15-r2; 
+</code></pre>
+</div>
+</li>
 </ul>
 </section>
-<section id="slide-org1a4bf23">
-<h3 id="org1a4bf23">2) Solved dependency management</h3>
-<div class="outline-text-3" id="text-org1a4bf23">
+<section id="slide-org5340ddf">
+<h3 id="org5340ddf">2) Solve dependency management in app</h3>
+<div class="outline-text-3" id="text-org5340ddf">
 </div>
 </section>
-<section id="slide-org6ded719">
-<h4 id="org6ded719">Composer for php (private packagist)</h4>
-</section>
-<section id="slide-org1f4d712">
-<h4 id="org1f4d712">don't track build artifacts in version control</h4>
-</section>
-<section id="slide-org78a3997">
-<h3 id="org78a3997">3) Achieved dev-prod parity</h3>
-<div class="outline-text-3" id="text-org78a3997">
+<section id="slide-org9afd477">
+<h4 id="org9afd477">bundler, <a href="https://getcomposer.org">composer</a> (private packagist)</h4>
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>composer require aws/aws-sdk-php
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>gem install aws-sdk
+</code></pre>
 </div>
 </section>
-<section id="slide-org4ed4f39">
-<h4 id="org4ed4f39">Virtualbox with Vagrant</h4>
-<div class="outline-text-4" id="text-org4ed4f39">
+<section id="slide-org0b0b39c">
+<h4 id="org0b0b39c">don't track build artifacts in version control</h4>
+</section>
+<section id="slide-org1dc9cf7">
+<h3 id="org1dc9cf7">3) Achieve dev-prod parity</h3>
+<div class="outline-text-3" id="text-org1dc9cf7">
+</div>
+</section>
+<section id="slide-org7002413">
+<h4 id="org7002413">Virtualbox with Vagrant</h4>
+<div class="outline-text-4" id="text-org7002413">
 </div>
 <ul class="org-ul">
-<li><a id="org820f172"></a>Configuration Management<br />
+<li><a id="orge575437"></a>Configuration Management<br />
 <ul class="org-ul">
-<li><a id="org090476d"></a>Puppet<br /></li>
-<li><a id="org1b95a5f"></a>Chef<br /></li>
-<li><a id="orgb62d45d"></a>Ansible<br /></li>
+<li><a id="orgc5a0214"></a>Puppet<br /></li>
+<li><a id="orge7bcb87"></a>Chef<br /></li>
+<li><a id="org23b234d"></a>Ansible<br /></li>
 </ul>
 </li>
 </ul>
 </section>
-<section id="slide-orgbfc7308">
-<h4 id="orgbfc7308">Docker (immutable) images + Docker configuration (environment variables + init)</h4>
+<section id="slide-orgc55d5e0">
+<h4 id="orgc55d5e0">OR</h4>
 </section>
-<section id="slide-orgf714b9e">
-<h3 id="orgf714b9e">4) Separated config from code</h3>
-<div class="outline-text-3" id="text-orgf714b9e">
+<section id="slide-org8036732">
+<h4 id="org8036732"><a href="https://www.docker.com">Docker</a>1 (immutable) images + Docker configuration (environment variables + init)</h4>
+<div class="org-src-container">
+
+<pre  class="src src-php"><code trim>$databases['default']['default'] = [
+    'host' =&gt; '{{ getenv "DB_HOST" "mariadb" }}',
+    'database' =&gt; '{{ getenv "DB_NAME" "drupal" }}',
+    'username' =&gt; '{{ getenv "DB_USER" "drupal" }}',
+    'password' =&gt; '{{ getenv "DB_PASSWORD" "drupal" }}',
+    'driver' =&gt; '{{ getenv "DB_DRIVER" "mysql" }}'
+];
+ 
+$settings['memcache']['servers'] = [
+    '{{ getenv "MEMCACHE_HOST" "memcached" }}:11211' =&gt; 'default'
+];
+
+</code></pre>
+</div>
+
+
+</section>
+<section id="slide-orgc02c364">
+<h3 id="orgc02c364">4) Separate config from code in app</h3>
+<div class="outline-text-3" id="text-orgc02c364">
 </div>
 </section>
-<section id="slide-org94b4eaf">
-<h4 id="org94b4eaf">app’s config is everything that is likely to vary between deploys (staging, production, developer environments, etc).</h4>
-<div class="outline-text-4" id="text-org94b4eaf">
-</div>
-<ul class="org-ul">
-<li><a id="orgd1a08e1"></a>database credenials from Docker env vars<br /></li>
-</ul>
-</section>
-<section id="slide-org187f170">
-<h3 id="org187f170">5) Became stateless</h3>
-<div class="outline-text-3" id="text-org187f170">
-</div>
-</section>
-<section id="slide-org211f687">
-<h4 id="org211f687">avoid “sticky sessions”</h4>
-</section>
-<section id="slide-org84164af">
-<h4 id="org84164af">datastore that offers time-expiration, such as Memcached or Redis</h4>
-</section>
-<section id="slide-org0c9bab2">
-<h3 id="org0c9bab2">6) Centralized logging</h3>
-<div class="outline-text-3" id="text-org0c9bab2">
+<section id="slide-org6f5eeb9">
+<h4 id="org6f5eeb9">app’s config is everything that is likely to vary between deploys (staging, production, developer environments, etc).</h4>
+<div class="org-src-container">
+
+<pre  class="src src-php"><code trim>* @code
+*   $config_directories = [
+*     CONFIG_SYNC_DIRECTORY =&gt; '/directory/outside/webroot',
+*   ];
+
+</code></pre>
 </div>
 </section>
-<section id="slide-orgfd26c59">
-<h4 id="orgfd26c59">Logs provide visibility into the behavior of a running app</h4>
+<section id="slide-org7d0fc8f">
+<h3 id="org7d0fc8f">5) Become stateless</h3>
+<div class="outline-text-3" id="text-org7d0fc8f">
+</div>
+</section>
+<section id="slide-org34d789a">
+<h4 id="org34d789a">avoid “sticky sessions”</h4>
+</section>
+<section id="slide-org2e98573">
+<h4 id="org2e98573">datastore that offers time-expiration, such as Memcached or Redis</h4>
+
+</section>
+<section id="slide-orgfe54689">
+<h3 id="orgfe54689">6) Centralize logging</h3>
+<div class="outline-text-3" id="text-orgfe54689">
+</div>
+</section>
+<section id="slide-org69f06f6">
+<h4 id="org69f06f6">Logs provide visibility into the behavior of a running app</h4>
 </section>
 </section>
 <section>
-<section id="slide-org9c94bca">
-<h2 id="org9c94bca">Continuous delivery with AWS Services</h2>
-<div class="outline-text-2" id="text-org9c94bca">
+<section id="slide-org0f5bfbd">
+<h2 id="org0f5bfbd">Continuous delivery with AWS Services</h2>
+<div class="outline-text-2" id="text-org0f5bfbd">
 </div>
 </section>
-<section id="slide-org0610a67">
-<h3 id="org0610a67">Cluster Orchestration</h3>
-<div class="outline-text-3" id="text-org0610a67">
+<section id="slide-org6bfdeb5">
+<h3 id="org6bfdeb5">Cluster Orchestration</h3>
+<div class="outline-text-3" id="text-org6bfdeb5">
 </div>
 </section>
-<section id="slide-org0522159">
-<h4 id="org0522159">Kubernetes, <a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-ecs.html">ECS</a>, Swarm</h4>
+<section id="slide-orged11ca6">
+<h4 id="orged11ca6">Kubernetes, <a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-ecs.html">ECS</a>, Swarm</h4>
 </section>
-<section id="slide-org5917361">
-<h3 id="org5917361">Containers</h3>
-<div class="outline-text-3" id="text-org5917361">
+<section id="slide-org1fa4b76">
+<h4 id="org1fa4b76">Containers</h4>
+<div class="outline-text-4" id="text-org1fa4b76">
 </div>
-</section>
-<section id="slide-orgd0c722c">
-<h4 id="orgd0c722c"><a href="https://www.nginx.com">nginx</a>, apache</h4>
-</section>
-<section id="slide-org9072c0b">
-<h4 id="org9072c0b"><a href="https://www.php.net">php</a>, python, ruby</h4>
-
+<ul class="org-ul">
+<li><a id="org0954c03"></a><a href="https://www.nginx.com">nginx</a>, apache<br />
+<ul class="org-ul">
+<li><a id="orgf46b790"></a>407445147104.dkr.ecr.us-west-2.amazonaws.com/communications-nginx:1.17.4.1<br /></li>
+</ul>
+</li>
+<li><a id="org5969cb2"></a><a href="https://www.php.net">php</a>, python, ruby<br />
 <div class="figure">
 <p><a href="./php-sdk-overview.png"><img src="./php-sdk-overview.png" alt="php-sdk-overview.png" /></a>
 </p>
 </div>
-</section>
-<section id="slide-org5e3b7a0">
-<h4 id="org5e3b7a0">Relational Database Service</h4>
-<div class="outline-text-4" id="text-org5e3b7a0">
-</div>
-<ul class="org-ul">
-<li><a id="org1e91b4f"></a>Amazon Aurora<br /></li>
-</ul>
-</section>
-<section id="slide-org8aee3f8">
-<h4 id="org8aee3f8">Storage</h4>
-<div class="outline-text-4" id="text-org8aee3f8">
-</div>
-<ul class="org-ul">
-<li><a id="orga58ae31"></a>binary asset services<br />
-<ul class="org-ul">
-<li><a id="org088c175"></a><a href="https://aws.amazon.com/s3/">S3</a><br /></li>
-</ul>
-</li>
-<li><a id="org65c2fae"></a>traditional NFS filesystem<br />
-<ul class="org-ul">
-<li><a id="orgca26287"></a>EFS (Elastic File System)<br /></li>
-</ul>
 </li>
 </ul>
+
 </section>
-<section id="slide-orgb89b963">
-<h4 id="orgb89b963">Logging</h4>
-<div class="outline-text-4" id="text-orgb89b963">
+<section id="slide-org78f9ddb">
+<h3 id="org78f9ddb">Relational Database Service</h3>
+<div class="outline-text-3" id="text-org78f9ddb">
+</div>
+</section>
+<section id="slide-org8403e6b">
+<h4 id="org8403e6b">Amazon Aurora</h4>
+</section>
+<section id="slide-org233bfce">
+<h3 id="org233bfce">Storage</h3>
+<div class="outline-text-3" id="text-org233bfce">
+</div>
+</section>
+<section id="slide-org6bf467d">
+<h4 id="org6bf467d">binary asset services</h4>
+<div class="outline-text-4" id="text-org6bf467d">
 </div>
 <ul class="org-ul">
-<li><a id="orgcdd17bc"></a><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-cloudwatchlogs.html">CloudWatch</a><br /></li>
+<li><a id="orgf8a28c9"></a><a href="https://aws.amazon.com/s3/">S3</a><br /></li>
 </ul>
 </section>
-<section id="slide-org9d9a690">
-<h4 id="org9d9a690">Caching</h4>
-<div class="outline-text-4" id="text-org9d9a690">
+<section id="slide-orgcfd0c36">
+<h4 id="orgcfd0c36">traditional NFS filesystem</h4>
+<div class="outline-text-4" id="text-orgcfd0c36">
 </div>
 <ul class="org-ul">
-<li><a id="orgd943007"></a><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-elasticache.html">elasticache</a> (Redis, Memcached)<br /></li>
-<li><a id="orgedb3f59"></a>Require forked version of php memcached libraries to support memcached cluster<br /></li>
+<li><a id="org3c7a69a"></a>EFS (Elastic File System)<br /></li>
 </ul>
 </section>
-<section id="slide-orgd681145">
-<h4 id="orgd681145"><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-ses.html">📨 ses</a> (smtp api)</h4>
+<section id="slide-org275883d">
+<h3 id="org275883d">Logging</h3>
+<div class="outline-text-3" id="text-org275883d">
+</div>
 </section>
-<section id="slide-orga35d1b5">
-<h4 id="orga35d1b5">ssm (parameter store)</h4>
-</section>
-<section id="slide-org0480d54">
-<h4 id="org0480d54">Simple Queue Service (Amazon <a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-sqs.html">SQS</a>)</h4>
-</section>
-<section id="slide-org63dba24">
-<h4 id="org63dba24">ecr</h4>
-</section>
-<section id="slide-org1df60c6">
-<h4 id="org1df60c6">elasticsearch</h4>
-<div class="outline-text-4" id="text-org1df60c6">
+<section id="slide-org5f30cc2">
+<h4 id="org5f30cc2">CloudWatch streams</h4>
+<div class="outline-text-4" id="text-org5f30cc2">
 </div>
 <ul class="org-ul">
-<li><a id="orgc1441cd"></a>ELk stack<br />
-<ul class="org-ul">
-<li><a id="org5613aa6"></a>kibana<br /></li>
-</ul>
-</li>
+<li><a id="orgb731318"></a>nrel-docker4${sitename}-php<br /></li>
+<li><a id="org6750b74"></a>nrel-docker4${sitename}-nginx<br /></li>
 </ul>
 </section>
-<section id="slide-org778993a">
-<h4 id="org778993a"><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html">IAM</a></h4>
+<section id="slide-org05f3451">
+<h3 id="org05f3451">Caching</h3>
+<div class="outline-text-3" id="text-org05f3451">
+</div>
 </section>
-<section id="slide-orgbe15c56">
-<h4 id="orgbe15c56"><a href="https://aws.amazon.com/blogs/devops/introducing-application-load-balancer-unlocking-and-optimizing-architectures/">Elastic Load Balancing</a></h4>
-<div class="outline-text-4" id="text-orgbe15c56">
+<section id="slide-org158e0c4">
+<h4 id="org158e0c4"><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-elasticache.html">elasticache</a> (Redis, Memcached)</h4>
+</section>
+<section id="slide-orgd177556">
+<h4 id="orgd177556">Require forked version of <a href="https://github.com/awslabs/aws-elasticache-cluster-client-memcached-for-php">php memcached</a> libraries to support memcached cluster</h4>
+</section>
+<section id="slide-org89f4980">
+<h3 id="org89f4980"><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-ses.html">📨 ses</a> (smtp api)</h3>
+</section>
+<section id="slide-org6c8f383">
+<h3 id="org6c8f383">ssm (parameter store)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-shell"><code trim>/nrel/${sitename}/sandbox/
+/nrel/${sitename}/stage/
+/nrel/${sitename}/prod/
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgcab9bdc">
+<h3 id="orgcab9bdc">ecr</h3>
+<div class="outline-text-3" id="text-orgcab9bdc">
+</div>
+</section>
+<section id="slide-org602e5c5">
+<h4 id="org602e5c5">407445147104.dkr.ecr.us-west-2.amazonaws.com/communications-base-php:7.3.12.3</h4>
+</section>
+<section id="slide-orgad880ab">
+<h3 id="orgad880ab">elasticsearch</h3>
+<div class="outline-text-3" id="text-orgad880ab">
+</div>
+</section>
+<section id="slide-orgddf44f5">
+<h4 id="orgddf44f5">ELk stack</h4>
+<div class="outline-text-4" id="text-orgddf44f5">
 </div>
 <ul class="org-ul">
-<li><a id="org6944237"></a>blue/green<br /></li>
-<li><a id="org428ce41"></a>nginx entrypoints<br /></li>
+<li><a id="org7530253"></a>kibana - detail more<br /></li>
 </ul>
 </section>
-<section id="slide-org3501396">
-<h4 id="org3501396">AWS Lambda</h4>
+<section id="slide-org60098e7">
+<h3 id="org60098e7"><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html">IAM</a></h3>
+<div class="org-src-container">
+
+<pre  class="src src-php"><code trim>$stsClient = new Aws\Sts\StsClient([
+    'profile' =&gt; 'default',
+    'region' =&gt; 'us-east-2',
+    'version' =&gt; '2011-06-15'
+]);
+</code></pre>
+</div>
+</section>
+<section id="slide-orgac87be8">
+<h3 id="orgac87be8"><a href="https://aws.amazon.com/blogs/devops/introducing-application-load-balancer-unlocking-and-optimizing-architectures/">Elastic Load Balancing</a></h3>
+<div class="outline-text-3" id="text-orgac87be8">
+</div>
+</section>
+<section id="slide-org736dddb">
+<h4 id="org736dddb">nginx entrypoints</h4>
+<div class="outline-text-4" id="text-org736dddb">
+</div>
+<ul class="org-ul">
+<li><a id="org6fbd674"></a>${sitename}.nrelcloud.org (temporary prod site)<br /></li>
+<li><a id="orgfa05dfc"></a>${sitename}.org (external prod site available after cyber approval)<br /></li>
+<li><a id="org8d84f4f"></a>${sitename}-stage.nrelcloud.org (stage)<br /></li>
+</ul>
+
+</section>
+<section id="slide-orgc1c8b97">
+<h3 id="orgc1c8b97">Simple Queue Service (Amazon <a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-sqs.html">SQS</a>)</h3>
+<pre  class="example">
+use Aws\Sqs\SqsClient;
+$SqsClient-&gt;sendMessage(array(
+    'QueueUrl' =&gt; 'https://sqs.us-west-2.amazonaws.com/991404956194/nrel-datacatalog-s3move',
+    'MessageBody' =&gt; $message_body
+));
+</pre>
 </section>
 </section>
 <section>
-<section id="slide-org18490a4">
-<h2 id="org18490a4">Using Web Services in Production</h2>
-<div class="outline-text-2" id="text-org18490a4">
+<section id="slide-orgd369871">
+<h2 id="orgd369871">Using Web Services in Production</h2>
+<div class="outline-text-2" id="text-orgd369871">
 </div>
 </section>
-<section id="slide-org21a3fca">
-<h4 id="org21a3fca">Four production Drupal sites</h4>
-<div class="outline-text-4" id="text-org21a3fca">
+<section id="slide-org1dffe8a">
+<h4 id="org1dffe8a">Seven production Drupal sites</h4>
+<div class="outline-text-4" id="text-org1dffe8a">
 </div>
 <ul class="org-ul">
-<li><a id="orgf9ee6de"></a>Most scalable CMS 💧<br /></li>
-<li><a id="orgb7aea76"></a>RESTful web services are smooth in Drupal 8<br /></li>
-<li><a id="orga103947"></a>Modules supporting AWS Web Services<br />
+<li><a id="org42c19de"></a>Most scalable CMS 💧<br /></li>
+<li><a id="org22279c2"></a>RESTful web services are smooth in Drupal 8<br /></li>
+<li><a id="orgc9c7b06"></a>Modules supporting AWS Web Services<br />
 <ul class="org-ul">
-<li><a id="orgbb69bd4"></a><a href="https://www.drupal.org/project/s3fs">https://www.drupal.org/project/s3fs</a><br /></li>
-<li><a id="org2c2b5ba"></a><a href="https://www.drupal.org/project/ses_mailer">https://www.drupal.org/project/ses_mailer</a><br /></li>
+<li><a id="orgf206951"></a><a href="https://www.drupal.org/project/s3fs">https://www.drupal.org/project/s3fs</a><br /></li>
+<li><a id="org2ea63a3"></a><a href="https://www.drupal.org/project/ses_mailer">https://www.drupal.org/project/ses_mailer</a><br /></li>
 </ul>
 </li>
-<li><a id="org9b4962b"></a>Decoupled Drupal<br /></li>
-<li><a id="org50d10c1"></a>RESTful web services are smooth in Drupal 8<br /></li>
-<li><a id="orgec4ebba"></a>NREL services<br />
+<li><a id="org748e79e"></a>Decoupled Drupal<br /></li>
+<li><a id="orgd064bf9"></a>RESTful web services are smooth in Drupal 8<br /></li>
+</ul>
+</section>
+<section id="slide-org00d5c0c">
+<h4 id="org00d5c0c">Wordpress</h4>
+<div class="outline-text-4" id="text-org00d5c0c">
+</div>
 <ul class="org-ul">
-<li><a id="org4d64d60"></a>NREL People Services<br /></li>
+<li><a id="orgfca7e21"></a>Wordpress is 34 percent of web<br /></li>
+<li><a id="org81b99ac"></a>using <a href="https://roots.io/twelve-factor-wordpress/">Bedrock</a> to make WordPress cloud native<br /></li>
+</ul>
+</section>
+<section id="slide-orgb0e4e88">
+<h4 id="orgb0e4e88">Other frameworks</h4>
+<div class="outline-text-4" id="text-orgb0e4e88">
+</div>
+<ul class="org-ul">
+<li><a id="orgfe24465"></a>php<br />
+<ul class="org-ul">
+<li><a id="org4c9e2dc"></a>Laravel<br /></li>
+<li><a id="orgd968540"></a>Symfony<br /></li>
+</ul>
+</li>
+<li><a id="orgdc86036"></a>ruby<br /></li>
+<li><a id="org3729d89"></a>python<br /></li>
+</ul>
+</section>
+<section id="slide-orgc809e47">
+<h4 id="orgc809e47">Things I'd love to explore at NREL</h4>
+<div class="outline-text-4" id="text-orgc809e47">
+</div>
+<ul class="org-ul">
+<li><a id="org0b888d1"></a>Content Delivery<br />
+<ul class="org-ul">
+<li><a id="orgd680748"></a><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-cloudfront.html">CloudFront</a> (CDN)<br /></li>
+</ul>
+</li>
+<li><a id="orgb255fb6"></a><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-cd-pipeline.html">Continuous Integration</a><br />
+<ul class="org-ul">
+<li><a id="orgd279023"></a>Automated builds with <a href="https://aws.amazon.com/blogs/devops/build-a-continuous-delivery-pipeline-for-your-container-images-with-amazon-ecr-as-source/">AWS CodeBuild</a><br /></li>
+<li><a id="orgac7c9c4"></a>Continuous Deployment with CodePipeline<br /></li>
+<li><a id="orge626681"></a><a href="https://circleci.com">https://circleci.com</a><br /></li>
+</ul>
+</li>
+<li><a id="org0dabe1d"></a>Testing<br />
+<ul class="org-ul">
+<li><a id="org24bd348"></a><a href="http://www.inanzzz.com/index.php/post/2ek7/testing-aws-services-with-phpunit-within-symfony-application">Testing AWS services with PHPUnit</a><br /></li>
+<li><a id="orgea7ab9d"></a>ci pipelines for builds<br /></li>
+</ul>
+</li>
+<li><a id="org4abf244"></a>Data Store<br />
+<ul class="org-ul">
+<li><a id="orge5914a4"></a><a href="https://docs.aws.amazon.com/aws-sdk-php/v2/guide/service-dynamodb.html">DynamoDB</a><br /></li>
 </ul>
 </li>
 </ul>
 </section>
-<section id="slide-org6907737">
-<h4 id="org6907737">Wordpress</h4>
-<div class="outline-text-4" id="text-org6907737">
-</div>
-<ul class="org-ul">
-<li><a id="orgc439159"></a>Wordpress is 34 percent of web<br /></li>
-<li><a id="orgf58fa28"></a>using <a href="https://roots.io/twelve-factor-wordpress/">Bedrock</a> to make WordPress cloud native<br /></li>
-</ul>
+</section>
+<section>
+<section id="slide-org60da02c">
+<h2 id="org60da02c">Questions?</h2>
 </section>
 </section>
 </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js/lib/js/head.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/reveal.js/js/reveal.js"></script>
+
 <script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
 
-controls: true,
-progress: true,
-history: false,
-center: true,
-slideNumber: 'c',
-rollingLinks: false,
-keyboard: true,
-mouseWheel: false,
-fragmentInURL: false,
-hashOneBasedIndex: false,
-pdfSeparateFragments: true,
-
-overview: true,
-
-theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-transition: Reveal.getQueryHash().transition || 'convex', // see README of reveal.js for options
-transitionSpeed: 'default',
-
-// Optional libraries used to extend reveal.js
+// Optional libraries used to extend on reveal.js
 dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
  { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
  { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } },
- { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }]
-
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
 });
 </script>
 </body>
